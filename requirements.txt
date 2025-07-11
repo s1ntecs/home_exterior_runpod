@@ -19,3 +19,4 @@ peft==0.10.0
 
 # --- RunPod worker ---
 runpod                          
+omegaconf
