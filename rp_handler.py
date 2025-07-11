@@ -334,10 +334,10 @@ def handler(job: Dict[str, Any]) -> Dict[str, Any]:
         mask_blur_radius = float(payload.get("mask_blur_radius", 3))
 
          # ----------------- handle LoRA ----------------- #
-        error = _switch_lora(payload.get("lora"),
-                             payload.get("lora_scale", 1.0))
-        if error:
-            return {"error": error}
+        # error = _switch_lora(payload.get("lora"),
+        #                      payload.get("lora_scale", 1.0))
+        # if error:
+        #     return {"error": error}
 
         image = url_to_pil(image_url)
         start = time.time()

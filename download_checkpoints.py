@@ -113,9 +113,9 @@ def get_pipeline():
             "lllyasviel/sd-controlnet-mlsd", torch_dtype=torch.float16
         ),
     ]
-    pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
+    pipe = StableDiffusionControlNetInpaintPipeline.from_single_file(
         # "SG161222/Realistic_Vision_V3.0_VAE",
-        "hafsa000/interior-design",
+        "checkpoints/exteriorDesign_v10.safetensors",
         controlnet=controlnet,
         safety_checker=None,
         torch_dtype=torch.float16,
