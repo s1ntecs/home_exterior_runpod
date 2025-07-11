@@ -129,9 +129,10 @@ controlnet = [
     ),
 ]
 
-PIPELINE = StableDiffusionControlNetInpaintPipeline.from_pretrained(
+PIPELINE = StableDiffusionControlNetInpaintPipeline.from_single_file(
     # "SG161222/Realistic_Vision_V3.0_VAE",
-    "hafsa000/interior-design",
+    # "hafsa000/interior-design",
+    "checkpoints/exteriorDesign_v10.safetensors",
     controlnet=controlnet,
     safety_checker=None,
     torch_dtype=DTYPE,
