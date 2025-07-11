@@ -82,7 +82,7 @@ def fetch_checkpoints() -> None:
     """Скачиваем SD-чекпойнт, LoRA-файлы и все внешние зависимости."""
     hf_hub_download(
         repo_id="sintecs/interior",
-        filename="exteriorDesign_v10.safetensors",
+        filename="architectureExterior_v110.safetensors",
         local_dir="checkpoints",
         local_dir_use_symlinks=False,
     )
@@ -115,7 +115,7 @@ def get_pipeline():
     ]
     pipe = StableDiffusionControlNetInpaintPipeline.from_single_file(
         # "SG161222/Realistic_Vision_V3.0_VAE",
-        "checkpoints/exteriorDesign_v10.safetensors",
+        "checkpoints/architectureExterior_v110.safetensors",
         controlnet=controlnet,
         safety_checker=None,
         torch_dtype=torch.float16,
