@@ -156,13 +156,6 @@ REFINER.scheduler = DDIMScheduler.from_config(REFINER.scheduler.config)
 # REFINER.enable_sequential_cpu_offload()
 REFINER.to(DEVICE)
 
-
-control_items = [
-    "windowpane;window",
-    "column;pillar",
-    "door;double;door",
-]
-
 seg_image_processor = AutoImageProcessor.from_pretrained(
     "nvidia/segformer-b5-finetuned-ade-640-640"
 )
@@ -333,7 +326,19 @@ def handler(job: Dict[str, Any]) -> Dict[str, Any]:
 
         mask_blur_radius = float(payload.get("mask_blur_radius", 3))
 
-         # ----------------- handle LoRA ----------------- #
+        # ----------------- segment items ----------------- #
+        mask_items_raw = payload.get("mask_items", [])
+        if isinstance(mask_items_raw, str):
+            mask_items = [
+                s.strip() for s in mask_items_raw.split(",") if s.strip()]
+        elif isinstance(mask_items_raw, list):
+            mask_items = [str(s) for s in mask_items_raw]
+        else:
+            mask_items = ["windowpane;window",
+                          "column;pillar",
+                          "door;double;door"]
+
+        #  ----------------- handle LoRA ----------------- #
         # error = _switch_lora(payload.get("lora"),
         #                      payload.get("lora_scale", 1.0))
         # if error:
@@ -353,10 +358,14 @@ def handler(job: Dict[str, Any]) -> Dict[str, Any]:
         unique_colors = np.unique(real_seg.reshape(-1, real_seg.shape[2]), axis=0)
         unique_colors = [tuple(color) for color in unique_colors]
         segment_items = [map_colors_rgb(i) for i in unique_colors]
+
+        logger.info(f"Segmented items: {segment_items},"
+                    f"mask items: {mask_items}")
+
         chosen_colors, segment_items = filter_items(
             colors_list=unique_colors,
             items_list=segment_items,
-            items_to_remove=control_items,
+            items_to_remove=mask_items,
         )
         mask = np.zeros_like(real_seg)
         for color in chosen_colors:
